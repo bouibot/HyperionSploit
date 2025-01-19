@@ -37,8 +37,13 @@ getgenv().hookmetamethod = newcclosure(function(object, method, hook)
     assert(mt, "Object doesn't have a metatable!");
     local oldMethod = mt[method];
     assert(oldMethod, "Metatable doesn't have this method!");
+
+    local readOnly = isreadonly(mt);
+
+    setreadonly(mt, false);
     mt[method] = newcclosure(function(...)
 		return hook(...);
 	end);
+    setreadonly(mt, readOnly);
     return oldMethod;
 end);
